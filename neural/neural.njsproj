@@ -13,7 +13,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>f339cbbc-01b1-4b1c-83a4-a9b8b39106ce</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>server.js</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -31,22 +31,38 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.js" />
-    <Compile Include="routes\index.js" />
-    <Compile Include="routes\users.js" />
+    <Compile Include="server.js" />
+    <Compile Include="web\class\SoundPlayer.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\class\SoundRecorder.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\class\StepButton.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\convnet-min.js" />
+    <Compile Include="web\main.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\promises\UserMedia.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Content Include="package.json" />
-    <Content Include="public\stylesheets\main.css" />
     <Content Include="README.md" />
-    <Content Include="views\index.pug" />
-    <Content Include="views\layout.pug" />
-    <Content Include="views\error.pug" />
+    <Content Include="web\index.html">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="web\sound.html">
+      <SubType>Code</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="public\" />
-    <Folder Include="public\images\" />
-    <Folder Include="public\javascripts\" />
-    <Folder Include="public\stylesheets\" />
-    <Folder Include="routes\" />
-    <Folder Include="views\" />
+    <Folder Include="web\" />
+    <Folder Include="web\class\" />
+    <Folder Include="web\lib\" />
+    <Folder Include="web\soun\" />
+    <Folder Include="web\promises\" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
