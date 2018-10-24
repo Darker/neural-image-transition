@@ -113,6 +113,7 @@ export default class SoundRecorder extends EventEmitter {
                             }
                         }
                         if (!hasNonZero) {
+                            console.log("Empty sample!");
                             return;
                         }
                         else {
