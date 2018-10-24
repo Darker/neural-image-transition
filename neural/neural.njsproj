@@ -38,6 +38,9 @@
     <Compile Include="web\class\SoundRecorder.js">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="web\class\SoundRenderer.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="web\class\StepButton.js">
       <SubType>Code</SubType>
     </Compile>
@@ -46,6 +49,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\promises\UserMedia.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\util\SoundUtils.js">
       <SubType>Code</SubType>
     </Compile>
     <Content Include="package.json" />
@@ -61,6 +67,7 @@
     <Folder Include="web\" />
     <Folder Include="web\class\" />
     <Folder Include="web\lib\" />
+    <Folder Include="web\util\" />
     <Folder Include="web\soun\" />
     <Folder Include="web\promises\" />
   </ItemGroup>
