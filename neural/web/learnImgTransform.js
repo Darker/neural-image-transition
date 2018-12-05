@@ -10,9 +10,34 @@
 layer_defs = [];
 
 layer_defs.push({ type: 'input', out_sx: 1, out_sy: 1, out_depth: 3 }); // 3 inputs: x, y, time
-layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'tanh' });
-layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'relu' });
-layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
+//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
+layer_defs.push({ type: 'relu', num_neurons: 8, activation: 'relu' });
+layer_defs.push({ type: 'relu', num_neurons: 8, activation: 'relu' });
+
+//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
+///layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 6, activation: 'maxout' });
+
+//layer_defs.push({ type: 'fc', num_neurons: 6, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 8, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 8, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+
+//layer_defs.push({ type: 'fc', num_neurons: 27});
+//layer_defs.push({ type: 'fc', num_neurons: 8 });
+//layer_defs.push({ type: 'fc', num_neurons: 4, activation: 'maxout' });
+//layer_defs.push({ type: 'fc', num_neurons: 3});
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 3, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'tanh' });
+//layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'relu' });
+//layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
 //layer_defs.push({ type: 'fc', num_neurons: 1, activation: 'relu' });
 //layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
 //layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
@@ -20,9 +45,7 @@ layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
 //layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
 //layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
 //layer_defs.push({ type: 'fc', num_neurons: 5, activation: 'sigmoid' });
-//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
-//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
-//layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
+
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
@@ -43,12 +66,13 @@ layer_defs.push({ type: 'regression', num_neurons: 3 }); // 3 outputs: r,g,b
 const net = new convnetjs.Net();
 net.makeLayers(layer_defs);
 
-//const trainer = new convnetjs.SGDTrainer(net, { learning_rate: 0.05, momentum: 0.9, batch_size: 500, l2_decay: 0.0 });
-const trainer = new convnetjs.Trainer(net, {
-    method: 'adadelta',
-    l2_decay: 0.000001,
-    batch_size: 1
-});
+const trainer = new convnetjs.SGDTrainer(net, { learning_rate: 0.1, momentum: 0.1, batch_size: 1, l2_decay: 0.95});
+
+//const trainer = new convnetjs.Trainer(net, {
+//    method: 'adadelta',
+//    l2_decay: 0.000001,
+//    batch_size: 1
+//});
 //const trainer = new convnetjs.SGDTrainer(net, { learning_rate: 0.01, momentum: 0.4, batch_size: 1, l2_decay: 0.001 });
 
 function teachCoordinate(x, y, time, width, height, r, g, b, preparedInput,preparedOutput) {
@@ -74,6 +98,7 @@ function teachCoordinate(x, y, time, width, height, r, g, b, preparedInput,prepa
 }
 
 const imgPreset = ["images/v2/1.png", "images/v2/2.png", "images/v2/3.png", "images/v2/4.png"];
+//const imgPreset = ["images/1.png", "images/2.png", "images/3.png", "images/4.png", "images/5.png"];
 /** @type {HTMLCanvasElement[]} **/
 const images = [];
 /** @type {HTMLInputElement} **/
@@ -148,7 +173,7 @@ function generateClicked(e) {
         showAll();
     }
     else {
-        createImage(timeSelect.value * 1);
+        createImage(timeSelect.value * 1,true);
     }
 }
 function save() {
@@ -281,21 +306,31 @@ function teachAll(retraining=false) {
         ++time;
     }
 }
-function createImage(time) {
+function createImage(time, display=false) {
     console.log("Generating output for time: ", time);
+
+    const margin = (!display) && typeof window.datamargin === "number" ? window.datamargin:0;
     var W = outputCanvas.width;
     var H = outputCanvas.height;
-    const ctx = outputCanvas.getContext("2d");
-    var g = ctx.getImageData(0, 0, W, H);
+
+    //const maxX = margin * 2 + W;
+    //const maxY = margin * 2 + H;
+
+    const scaleX = (margin + W)/W;
+    const scaleY = (margin + H)/H;
+
+    /** @type {ImageData} **/
+    var g = new ImageData(W, H);
+
     var v = new convnetjs.Vol(1, 1, 3);
     v.w[2] = time;
     
     for (var x = 0; x < W; x++) {
-        v.w[0] = (x - W / 2) / W;
+        v.w[0] = ((x - W/ 2) / W)*scaleX;
         for (var y = 0; y < H; y++) {
-            v.w[1] = (y - H / 2) / H;
+            v.w[1] = ((y  - H / 2) / H)*scaleY;
 
-            var ix = ((W * y) + x) * 4;
+            const ix = ((W * y) + x) * 4;
             var r = net.forward(v);
 
             //if (ix % 160 == 0) {
@@ -306,9 +341,24 @@ function createImage(time) {
             g.data[ix + 1] = Math.floor(256 * r.w[1]);
             g.data[ix + 2] = Math.floor(256 * r.w[2]);
             g.data[ix + 3] = 255; // alpha...
+
+            //if (x == 0 && y == 0) {
+            //    console.log("First pixel: ", [x, y], [...v.w], ix);
+            //}
+            //else if (x + 1 >= maxX && y + 1 >= maxY) {
+            //    console.log("Last pixel: ", [x, y], [...v.w], ix);
+            //}
         }
+
     }
-    ctx.putImageData(g, 0, 0);
+
+    //console.log("Data: ", g);
+
+    if (display) {
+
+        const ctx = outputCanvas.getContext("2d");
+        ctx.putImageData(g, 0, 0);
+    }
     return g;
 }
 async function play() {
@@ -327,7 +377,7 @@ async function play() {
         }
         const timeFloat = (beforeGenerate - startTime) / totalTime;
         timeSelect.value = timeFloat;
-        createImage(timeFloat);
+        createImage(timeFloat,true);
         const remainingTime = (performance.now() - beforeGenerate) - timeStep;
         if (remainingTime > 0) {
             await timeout(remainingTime);
@@ -353,6 +403,7 @@ function showAll() {
         const time = i / (maxImages - 1);
         const data = createImage(time);
         const cvas = document.createElement("canvas");
+        //cvas.title = "DATA: [" + data.width + "," + data.height + "]";
         cvas.width = data.width;
         cvas.height = data.height;
         cvas.getContext("2d").putImageData(data, 0, 0);

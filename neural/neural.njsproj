@@ -45,6 +45,12 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="web\convnet-min.js" />
+    <Compile Include="web\learnImgTransform.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="web\learn_image_filters_example.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="web\main.js">
       <SubType>Code</SubType>
     </Compile>
