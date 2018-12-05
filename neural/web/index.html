@@ -4,39 +4,90 @@
 <head>
     <meta charset="utf-8" />
     <title></title>
+    <style>
+        .imglist {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin:0;
+            padding:0;
+        }
+        .imglist canvas {
+            height: 5em;
+            border: 1px solid black;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+        #outcanvas {
+            display: block;
+            border: 1px solid black;
+        }
+        #outputs {
+            background-color: #f3f3f3;
+            margin: 0;
+            padding: 0;
+        }
+        #outputs h1 {
+            font-size: 13pt;
+            font-weight: normal;
+            margin: 0;
+            padding: 0;
+        }
+        #outputs h1.input {
+            border-top:1px solid black;
+        }
+        #outputs h1.output {
+            border-bottom: 1px solid black;
+        }
+        #outputs .markers {
+            background-color: #e6eaf0;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            margin: 0;
+            padding: 0;
+        }
+        #outputs .markers > div {
+            font-family: Courier New, Courier, monospace;
+            font-size: 9pt;
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
 <body>
-    <script src="convnet-min.js"></script>
+    <script src="convnet.js"></script>
+
+    <div id="images">
+
+        Add image: <input type="file" id="imagefile" multiple /><button id="fromfile">Add</button><br />
+        From preset: <button id="frompreset">Add</button>
+
+    </div>
+    <div id="learn">
+        <button id="teach">Teach all</button><button id="teachFix">Fix wrong values</button>
+        <!--<progress>Working</progress>-->
+    </div>
+    <div id="output">
+        <h2>Output</h2>
+        <input type="range" min="0" max="1" step="0.01" id="timeinput" />
+        <button id="generate">Generate (ctrl for all)</button><button id="play">Play (10s animation)</button>
+        <canvas id="outcanvas" width="100" height="100"></canvas>
+    </div>
+    <div id="outputs">
+        <h1 class="input">Input images</h1>
+        <div id="imglist" class="imglist"></div>
+        <div class="markers"><div>0</div><div>0.25</div><div>0.5</div><div>0.25</div><div>1</div></div>
+        <div id="genlist" class="imglist"></div>
+        <h1 class="output">Output sequence</h1>
+    </div>
+
+
     <!-- javascript goes here -->
-    <script type="text/javascript">
-
-        function periodic() {
-            var d = document.getElementById('egdiv');
-            d.innerHTML = 'Random number: ' + Math.random()
-        }
-
-        var net; // declared outside -> global variable in window scope
-        function start() {
-
-            const layer_defs = [];
-            layer_defs.push({ type: 'input', out_sx: 32, out_sy: 32, out_depth: 3 });
-            layer_defs.push({ type: 'conv', sx: 5, filters: 16, stride: 1, pad: 2, activation: 'relu' });
-            layer_defs.push({ type: 'pool', sx: 2, stride: 2 });
-            layer_defs.push({ type: 'conv', sx: 5, filters: 20, stride: 1, pad: 2, activation: 'relu' });
-            layer_defs.push({ type: 'pool', sx: 2, stride: 2 });
-            layer_defs.push({ type: 'conv', sx: 5, filters: 20, stride: 1, pad: 2, activation: 'relu' });
-            layer_defs.push({ type: 'pool', sx: 2, stride: 2 });
-            layer_defs.push({ type: 'softmax', num_classes: 10 });
-
-            net = new convnetjs.Net();
-            net.makeLayers(layer_defs);
-
-            trainer = new convnetjs.SGDTrainer(net, { method: 'adadelta', batch_size: 4, l2_decay: 0.0001 });
-        }
+    <script type="text/javascript" src="learnImgTransform.js">
 
     </script>
-    <div id="egdiv"></div>
-
-
 </body>
 </html>
