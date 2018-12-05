@@ -127,11 +127,17 @@ async function addPresetClicked() {
     faddbutton.disabled = false;
     paddbutton.disabled = false;
 }
-function teachClicked() {
+function teachClicked(e) {
     teachAll();
+    if (e.ctrlKey) {
+        showAll();
+    }
 }
-function teachFixClicked() {
+function teachFixClicked(e) {
     teachAll(true);
+    if (e.ctrlKey) {
+        showAll();
+    }
 }
 /**
  * 
