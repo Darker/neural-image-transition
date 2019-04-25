@@ -11,9 +11,10 @@ layer_defs = [];
 
 layer_defs.push({ type: 'input', out_sx: 1, out_sy: 1, out_depth: 3 }); // 3 inputs: x, y, time
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
-layer_defs.push({ type: 'relu', num_neurons: 8, activation: 'relu' });
-layer_defs.push({ type: 'relu', num_neurons: 8, activation: 'relu' });
-
+layer_defs.push({ type: 'fc', num_neurons: 5 });
+layer_defs.push({ type: 'fc', num_neurons: 5 });
+layer_defs.push({ type: 'fc', num_neurons: 5 });
+layer_defs.push({ type: 'fc', num_neurons: 5 });
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
 ///layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'relu' });
 //layer_defs.push({ type: 'fc', num_neurons: 20, activation: 'maxout' });
@@ -65,7 +66,7 @@ layer_defs.push({ type: 'relu', num_neurons: 8, activation: 'relu' });
 layer_defs.push({ type: 'regression', num_neurons: 3 }); // 3 outputs: r,g,b 
 const net = new convnetjs.Net();
 net.makeLayers(layer_defs);
-
+// stochastic gradient descent decay
 const trainer = new convnetjs.SGDTrainer(net, { learning_rate: 0.1, momentum: 0.1, batch_size: 1, l2_decay: 0.95});
 
 //const trainer = new convnetjs.Trainer(net, {
